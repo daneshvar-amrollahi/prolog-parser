@@ -1,0 +1,68 @@
+Db        . Database ::= [Clause] ;
+
+Fact      . Clause ::= Predicate ;
+Rule      . Clause ::= Predicate ":-" [Predicate] ;
+Directive . Clause ::= ":-" [Predicate] ;
+Query     . Clause ::= "?-" [Predicate] ;
+
+APred    . Predicate ::= Atom ;
+CPred    . Predicate ::= Atom "(" [Term] ")" ;
+EPred    . Predicate ::= Expr ;
+
+EqExpr		. Expr1	::= Expr1 "#=" Expr2 ;
+EqqExpr	. Expr2	::= Expr2 "=" Expr3 ;
+NeqExpr 	. Expr3	::= Expr3 "#\\=" Expr4 ;
+NeqqExpr	. Expr4	::= Expr4 "=\\=" Expr5 ;	
+DisjExpr	. Expr5     	::= Expr5 ";" Expr6 ;
+NotExpr	. Expr6     	::= "\\+" Expr7 ;
+GtExpr		. Expr7     	::= Expr7 "#>" Expr8;
+LtExpr		. Expr8     	::= Expr8 "#<" Expr9;
+GeqExpr	. Expr9     	::= Expr9 "#>=" Expr10;
+LeqExpr	. Expr10     	::= Expr10 "#=<" Expr11;
+AddExpr	. Expr11     	::= Expr11 "+" Expr12;
+SubExpr	. Expr12    	::= Expr12 "-" Expr13;
+MultExpr	. Expr13    	::= Expr13 "*" Expr14;
+DivExpr	. Expr14    	::= Expr14 "//" Expr15;
+ModExpr	. Expr15    	::= Expr15 "mod" Expr16;
+ParExpr	. Expr16    	::= "(" Expr16 ")" ;
+NumExpr	. Expr16    	::= Num ;
+VarExpr	. Expr16    	::= UIdent;
+StrExpr	. Expr16    	::= LIdent;
+Exp		. Expr16    	::= Expr;
+
+coercions Expr 18 ;
+
+
+
+	 
+ 
+
+TAtom    . Term ::= Atom ;
+VarT     . Term ::= Var ;
+Complex  . Term ::= Atom "(" [Term] ")" ;
+TList    . Term ::= List ;
+TNum	 . Term ::= Num ;
+
+Atm      . Atom ::=  LIdent ;
+EAtm     . Atom ::=  "\'" Ident "\'";
+
+V        . Var ::= UIdent ;
+A        . Var ::= Wild ;
+
+Empty . List ::= "[" "]";
+Enum  . List ::= "[" [Term] "]" ;
+Cons  . List ::= "[" [Term] "|" List "]" ;
+ConsV . List ::= "[" [Term] "|" Var "]" ;
+
+-- List definitions
+
+terminator Clause "." ;
+separator nonempty Predicate "," ;
+separator nonempty Term "," ;
+
+-- Token definitions
+
+token UIdent (upper (letter | digit | '_')*) ;
+token LIdent (lower (letter | digit | '_')*) ;
+token Wild   '_' char* ;
+token Num (digit (digit)*);
